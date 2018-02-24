@@ -1,0 +1,19 @@
+﻿  main.cpp
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(44): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(47): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(51): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(74): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(75): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(178): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(179): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(205): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(283): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(330): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(331): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(335): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(339): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(343): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(344): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(348): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\leonardo\documents\github\cs3113\nyucodebase\main.cpp(352): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  NYUCodebase.vcxproj -> C:\Users\Leonardo\Documents\GitHub\cs3113\NYUCodebase\Debug\NYUCodebase.exe

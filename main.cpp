@@ -31,6 +31,7 @@ struct gameObj
 	float width = .25f;
 	float height = 1.0f;
 	float max = 1.5f;
+	float velx = 10.0f;
 	void right()
 	{
 		x = 3;
@@ -39,16 +40,16 @@ struct gameObj
 	{
 		x = -3;
 	}
-	void movepadel(int elapsed, int dir)
+	void movepadel(float elapsed, float dir)
 	{
-		float tmp = y + .1*dir;
+		float tmp = y + velx*dir*elapsed;
 		if (abs(tmp) <= max)
 		{
-			y += .1 * dir;
+			y += velx * dir*elapsed;
 		}
 		else if (abs(tmp) < abs(y))
 		{
-			y += .1*dir;
+			y += velx*dir*elapsed;
 		}
 		//if (abs(tmp) < max)
 		//{
@@ -85,7 +86,6 @@ struct ball
 	float x = 0.0f;
 	float max = 1.9f;
 	float maxx = 3.8f;
-	float angel;
 	float verts[12] = { -0.05f, -0.05f, -0.05f, .05f, .05f, .05f, 0.05f, 0.05f, -0.05f, -0.05f, .05f, -0.05f };
 	float flipy = 1.0f;
 	float flipx = 1.0f;
@@ -173,12 +173,10 @@ struct ball
 		x = 0;
 		y = 0;
 	}
-	void go(gameObj* obj)
+	void go(gameObj* obj, float elapsed)
 	{
-		float tmpx = x + .001 * flipx;
-		float tmpy = y + .001 * flipy;
-		bool rightpadde = obj->x == 3;
-		bool leftpaddle = obj->x <= -3;
+		float tmpx = x + 2.5 * flipx*elapsed;
+		float tmpy = y + 2.5 * flipy*elapsed;
 		float  paddleroof = obj->y + (obj->height / 2.0f);
 		float paddlefloor = obj->y - (obj->height / 2.0f);
 		float paddleleft = obj->x - (obj->width / 2.0f);
@@ -186,8 +184,6 @@ struct ball
 
 		float tmpballroof = tmpy + (height / 2.0f);
 		float tmpballfloor = tmpy - (height / 2.0f);
-		float ballroof = y + (height / 2.0f);
-		float ballfloor = y - (height / 2.0f);
 		float tmpballright = tmpx + (width / 2.0f);
 		float tmpballleft = tmpx - (width / 2.0f);
 		float ballright = x + (width / 2.0f);
@@ -195,14 +191,12 @@ struct ball
 		bool ballxpaddle = ((ballright >= paddleleft && ballleft <= paddleright) || (ballright >= paddleleft && ballleft < paddleleft) || (ballleft <= paddleright && ballright > paddleright));
 		bool undertest = (tmpballroof >= paddlefloor && ballxpaddle && paddleroof > tmpballroof && paddlefloor > tmpballfloor);
 		bool overtest = (tmpballfloor <= paddleroof && ballxpaddle && paddlefloor <= tmpballfloor && paddleroof < tmpballroof);
-		bool inrange = (ballfloor <= paddleroof && ballxpaddle && ballroof >= paddlefloor);
-		
 		if (abs(tmpy) < max)
 		{
 			if (undertest || overtest)
 			{
 				flipy = -1.0f;
-				y = y + .001 * flipy;
+				y = y + .0005 * flipy;
 			}
 		}
 
@@ -223,6 +217,7 @@ struct ball
 			{
 				y = tmpy;
 			}
+
 			else
 			{
 				flipy = -1.0f;
@@ -278,7 +273,7 @@ int main(int argc, char *argv[])
 	bool done = false;
 	glClearColor(.4f, .22f,.4f, 1.0f);
 	ShaderProgram program;
-	program.Load(RESOURCE_FOLDER"vertex_textured.glsl", RESOURCE_FOLDER"fragment_textured.glsl");
+	program.Load(RESOURCE_FOLDER"vertex.glsl", RESOURCE_FOLDER"fragment.glsl");
 	Matrix projectionMatrix;
 	projectionMatrix.SetOrthoProjection(-3.55, 3.55, -2.0f, 2.0f, -1.0f, 1.0f);
 	float lastFrameTicks = 0.0f;
@@ -308,54 +303,49 @@ int main(int argc, char *argv[])
 	glUseProgram(program.programID);
 	glClearColor(.4f, .9f, .4f, 1.0f);
 	while (!done) {
+		const Uint8 *keys = SDL_GetKeyboardState(NULL);
 		float ticks = (float)SDL_GetTicks() / 1000.0f;
 		float elapsed = ticks - lastFrameTicks;
 		lastFrameTicks = ticks;
-		if (elapsed == 0)
-		{
-			glClearColor(.4f, .4f, .4f, 1.0f);
-		}
-		else
-		{
-			glClearColor(.4f, .22f, .4f, 1.0f);
-		}
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT || event.type == SDL_WINDOWEVENT_CLOSE) {
 				done = true;
 			}
-			else if (event.type == SDL_KEYDOWN)
-			{
-				if (event.key.keysym.scancode == SDL_SCANCODE_W && event.key.keysym.scancode == SDL_SCANCODE_UP)
-				{
-					leftpadel.movepadel(elapsed, 1);
-					rightpadel.movepadel(elapsed, 1);
-				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_W)
-				{
-					leftpadel.movepadel(elapsed, 1);
-				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_UP)
-				{
-					rightpadel.movepadel(elapsed, 1);
-				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_S && event.key.keysym.scancode == SDL_SCANCODE_DOWN)
+		}
+		/*if (event.type == SDL_KEYDOWN)
+		{*/
+		if (keys[SDL_SCANCODE_W] && keys[SDL_SCANCODE_UP])
+		{
+			leftpadel.movepadel(elapsed, 1);
+			rightpadel.movepadel(elapsed, 1);
+		}
+		else if (keys[SDL_SCANCODE_S] && keys[SDL_SCANCODE_DOWN])
 				{
 					leftpadel.movepadel(elapsed, -1);
 					rightpadel.movepadel(elapsed, -1);
 				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_S)
+				else if (keys[SDL_SCANCODE_W])
+				{
+					leftpadel.movepadel(elapsed, 1);
+				}
+				else if (keys[SDL_SCANCODE_UP])
+				{
+					rightpadel.movepadel(elapsed, 1);
+				}
+				else if (keys[SDL_SCANCODE_S])
 				{
 					leftpadel.movepadel(elapsed, -1);
 				}
-				if (event.key.keysym.scancode == SDL_SCANCODE_DOWN)
+				else if (keys[SDL_SCANCODE_DOWN])
 				{
 					rightpadel.movepadel(elapsed, -1);
 				}
-			}
-		}		
+			//}
+				
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		ball.go(&leftpadel);
+		ball.go(&leftpadel,elapsed);
+		ball.go(&rightpadel,elapsed);
 		ball.collisiondetect(&leftpadel);
 		ball.collisiondetect(&rightpadel);
 		leftpadel.draw(&program);
